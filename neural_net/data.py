@@ -8,13 +8,30 @@ random.seed()
 
 # function for the NeuralNet output values
 def sigmoid(x):
-    return math.tanh(x)
+    return 1 / (1 + math.exp(-x))
+
+
+# Calculates the total error between expected outputs and actual outputs
+def total_error(ideal, actual):
+    if len(ideal) != len(actual):
+        raise ValueError("Invalid input")
+    sum = 0
+    for i in range(len(ideal)):
+        sum += 0.5*(ideal[i] - actual[i])**2
+    return sum
+
+
+# delta function for backpropagation
+def delta(out, target):
+    return -(target-out)*out*(1-out)
+
 
 # Class of a neuron in the net.
 class Neuron(object):
     def __init__(self, num_inputs):
         self.num_inputs = num_inputs
         self.weights = []
+        self.output = 0
         for _ in range(num_inputs + 1):
             self.weights.append(random.random())
 
@@ -32,28 +49,45 @@ class Neuron(object):
 
 # Neuron Layer class. Holds all the neurons in that layer.
 class NeuronLayer(object):
-    def __init__(self, num_neurons, num_inputs):
+    def __init__(self, num_neurons, num_inputs, bias=0):
         self.num_neurons = num_neurons
         self.neurons = []
+        self.bias = bias
         for _ in range(num_neurons):
             self.neurons.append(Neuron(num_inputs))
 
 
 # Neural net class. holds all the neuron layers.
 class NeuralNet(object):
-    def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_neurons_per_hidden_layer, bias):
+
+    def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_neurons_per_hidden_layer, biases = None, rate=0.5):
         self.num_inputs = num_inputs
         self.num_outputs = num_outputs
         self.num_hidden_layers = num_hidden_layers
         self.num_neurons_per_hidden_layer = num_neurons_per_hidden_layer
-        self.bias = bias
-        if self.num_hidden_layers > 0:
-            self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs)]
-            self.layers += [NeuronLayer(num_neurons_per_hidden_layer, num_neurons_per_hidden_layer)
-                            for _ in range(num_hidden_layers)]
-            self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer)]
+        self.learning_rate = rate
+        if biases is not None:
+            if self.num_hidden_layers > 1:
+                self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs, biases[0])]
+                self.layers += [NeuronLayer(num_neurons_per_hidden_layer, num_neurons_per_hidden_layer, biases[i+1])
+                                for i in range(num_hidden_layers - 1)]
+                self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer)]
+            elif self.num_hidden_layers > 0:
+                self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs, biases[0])]
+                self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer, biases[1])]
+            else:
+                self.layers = [NeuronLayer(num_outputs, num_inputs, biases[0])]
         else:
-            self.layers = [NeuronLayer(num_outputs, num_inputs)]
+            if self.num_hidden_layers > 1:
+                self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs)]
+                self.layers += [NeuronLayer(num_neurons_per_hidden_layer, num_neurons_per_hidden_layer)
+                                for i in range(num_hidden_layers - 1)]
+                self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer)]
+            elif self.num_hidden_layers > 0:
+                self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs)]
+                self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer)]
+            else:
+                self.layers = [NeuronLayer(num_outputs, num_inputs)]
 
     # function for outputting all the weights in the net as a 1D array.
     def get_weights(self):
@@ -63,6 +97,12 @@ class NeuralNet(object):
                 for w in n.weights:
                     out.append(w)
         return out
+
+    def get_net_state(self):
+        for layer in self.layers:
+            print("layer: ")
+            for neuron in layer.neurons:
+                print(neuron.weights)
 
     # outputs the total number of weights in the net
     def num_of_weights(self):
@@ -74,20 +114,54 @@ class NeuralNet(object):
     # Given a 2D array of weights, starting with the first neuron in the first layer and
     # ending with the last neuron in the last array, sets the weights of the all the neurons in the net.
     def put_weights(self, weights):
-        for layer in self.layers:
-            for neuron in layer.neurons:
-                neuron.set_weights(weights[:neuron.num_inputs])
-                weights = weights[neuron.num_inputs:]
+        for i, layer in enumerate(self.layers):
+            for n, neuron in enumerate(layer.neurons):
+                neuron.set_weights(weights[i][n])
 
     # Given an input, calculates the output of the NN.
-    def update(self, inputs):
-        if self.num_inputs != len(inputs):
-            raise ValueError("Invalid input")
-        else:
+    def forward_pass(self, inputs):
+        outputs = []
+        for layer in self.layers:
             outputs = []
-            for layer in self.layers:
-                outputs = []
-                for n in layer.neurons:
-                    outputs.append(sigmoid(n.sum(inputs) + n.weights[-1] * self.bias))
-                inputs = outputs
+            for n in layer.neurons:
+                out = sigmoid(n.sum(inputs) + n.weights[-1] * layer.bias)
+                n.output = out
+                outputs.append(out)
+            inputs = outputs
         return outputs
+
+    # Backpropagation training. Only works with 1 hidden layer as of now
+    def train(self, inputs, expected_outputs, debug=False):
+
+        if self.num_hidden_layers != 1:
+            raise ValueError("Backpropagation only works with 1 hidden layer")
+
+        # run the inputs through the net
+        original_out = self.forward_pass(inputs)
+
+        # handle output layer
+        for i in range(self.num_outputs):
+            neuron = self.layers[1].neurons[i]
+            for w in range(len(neuron.weights)):
+                neuron.weights[w] -= self.learning_rate*delta(neuron.output, expected_outputs[i])
+
+        # Handle hidden layer
+        for i in range(len(self.layers[0].neurons)):
+            neuron = self.layers[0].neurons[i]
+            for w in range(len(neuron.weights)):
+                change = 0
+                for k in range(len(self.layers[1].neurons)):
+                    out_neuron = self.layers[1].neurons[k]
+                    out = out_neuron.output
+                    change += out_neuron.weights[i] * -(expected_outputs[k] - out) * out * (1 - out)
+                deriv = change * neuron.output * (1 - neuron.output) * inputs[w]
+                neuron.weights[w] -= self.learning_rate*deriv
+
+        new_out = self.forward_pass(inputs)
+
+        if debug:
+            print("original error: " + str(total_error(expected_outputs, original_out)))
+            print("new error: " + str(total_error(expected_outputs, new_out)))
+
+
+
