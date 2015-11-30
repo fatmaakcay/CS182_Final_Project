@@ -32,7 +32,7 @@ class Neuron(object):
         self.num_inputs = num_inputs
         self.weights = []
         self.output = 0
-        for _ in range(num_inputs + 1):
+        for _ in range(num_inputs):
             self.weights.append(random.random())
 
     # sums the inputs weighted with the weights.
@@ -60,7 +60,7 @@ class NeuronLayer(object):
 # Neural net class. holds all the neuron layers.
 class NeuralNet(object):
 
-    def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_neurons_per_hidden_layer, biases = None, rate=0.5):
+    def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_neurons_per_hidden_layer, biases=None, rate=0.5):
         self.num_inputs = num_inputs
         self.num_outputs = num_outputs
         self.num_hidden_layers = num_hidden_layers
@@ -102,7 +102,9 @@ class NeuralNet(object):
         for layer in self.layers:
             print("layer: ")
             for neuron in layer.neurons:
+                print("neuron: ")
                 print(neuron.weights)
+                print(neuron.output)
 
     # outputs the total number of weights in the net
     def num_of_weights(self):
@@ -124,7 +126,7 @@ class NeuralNet(object):
         for layer in self.layers:
             outputs = []
             for n in layer.neurons:
-                out = sigmoid(n.sum(inputs) + n.weights[-1] * layer.bias)
+                out = sigmoid(n.sum(inputs) + layer.bias)
                 n.output = out
                 outputs.append(out)
             inputs = outputs
@@ -143,7 +145,7 @@ class NeuralNet(object):
         for i in range(self.num_outputs):
             neuron = self.layers[1].neurons[i]
             for w in range(len(neuron.weights)):
-                neuron.weights[w] -= self.learning_rate*delta(neuron.output, expected_outputs[i])
+                neuron.weights[w] -= self.learning_rate*delta(neuron.output, expected_outputs[i]) * self.layers[0].neurons[i].output
 
         # Handle hidden layer
         for i in range(len(self.layers[0].neurons)):
