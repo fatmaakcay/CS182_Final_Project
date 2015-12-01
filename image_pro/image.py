@@ -17,10 +17,10 @@ im = Image.open("colorfulsmiley.png")
 # Resizing first vs grayscaling first produces different results
 
 # Resizes the image
-im= im.resize((20,20), Image.BILINEAR)
+im= im.resize(size, Image.BILINEAR)
 
 # Grayscales the image
-# The mode '1' attributes sets every pixel to either black or white
+# The mode '1' converts every pixel to either black or white
 im = im.convert('1')
 
 # Converting our image into a 2x2 array of binary values
