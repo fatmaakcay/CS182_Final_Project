@@ -35,7 +35,7 @@ def binary_image(file):
 
     return binary_data
 
-result = binary_image("Images/colorfulsmiley.png")
+result = binary_image("Images/hearteyes.png")
 
 # This just pretty prints
 s = [[str(e) for e in row] for row in result]
