@@ -5,7 +5,7 @@ import glob as glob
 import random
 
 # possible outputs
-emojis = ["disgust", "laugh", "sad", "smile"]
+emojis = ["hearts", "laugh", "sad", "smile"]
 outputs = [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
