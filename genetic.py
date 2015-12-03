@@ -1,7 +1,3 @@
-from genetic_alg import data
-from genetic_alg import fit
-from genetic_alg import gen
-from genetic_alg import pop
+import genetic_alg as gen
 
-
-fit.count()
+gen.fit.count()
