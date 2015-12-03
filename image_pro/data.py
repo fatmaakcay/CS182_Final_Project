@@ -35,6 +35,15 @@ def binary_image(file):
 
     return binary_data
 
+
+# Convert 2d array to 1d array
+def convert_to_1d(bin_data):
+    output = []
+    for row in bin_data:
+        for el in row:
+            output.append(el)
+    return output
+
 result = binary_image("Images/colorfulsmiley.png")
 
 # This just pretty prints
