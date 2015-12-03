@@ -81,7 +81,7 @@ class NeuralNet(object):
             if self.num_hidden_layers > 1:
                 self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs)]
                 self.layers += [NeuronLayer(num_neurons_per_hidden_layer, num_neurons_per_hidden_layer)
-                                for i in range(num_hidden_layers - 1)]
+                                for _ in range(num_hidden_layers - 1)]
                 self.layers += [NeuronLayer(num_outputs, num_neurons_per_hidden_layer)]
             elif self.num_hidden_layers > 0:
                 self.layers = [NeuronLayer(num_neurons_per_hidden_layer, num_inputs)]
@@ -105,6 +105,13 @@ class NeuralNet(object):
                 print("neuron: ")
                 print(neuron.weights)
                 print(neuron.output)
+
+    def calculate_error(self, data):
+        error = 0
+        for input, output in data:
+            actual_out = self.forward_pass(input)
+            error += total_error(output, actual_out)
+        return error
 
     # outputs the total number of weights in the net
     def num_of_weights(self):
@@ -142,22 +149,29 @@ class NeuralNet(object):
         original_out = self.forward_pass(inputs)
 
         # handle output layer
+        output_deltas = [0 for _ in range(self.num_outputs)]
         for i in range(self.num_outputs):
             neuron = self.layers[1].neurons[i]
-            for w in range(len(neuron.weights)):
-                neuron.weights[w] -= self.learning_rate*delta(neuron.output, expected_outputs[i]) * self.layers[0].neurons[i].output
+            output_deltas[i] = delta(neuron.output, expected_outputs[i])
 
         # Handle hidden layer
-        for i in range(len(self.layers[0].neurons)):
+        hidden_deltas = [0 for _ in range(self.num_neurons_per_hidden_layer)]
+        for i in range(self.num_neurons_per_hidden_layer):
             neuron = self.layers[0].neurons[i]
-            for w in range(len(neuron.weights)):
-                change = 0
-                for k in range(len(self.layers[1].neurons)):
-                    out_neuron = self.layers[1].neurons[k]
-                    out = out_neuron.output
-                    change += out_neuron.weights[i] * -(expected_outputs[k] - out) * out * (1 - out)
-                deriv = change * neuron.output * (1 - neuron.output) * inputs[w]
-                neuron.weights[w] -= self.learning_rate*deriv
+            change = 0
+            for w in range(len(self.layers[1].neurons)):
+                change += output_deltas[w] * self.layers[1].neurons[w].weights[i]
+            hidden_deltas[i] = change * neuron.output * (1-neuron.output)
+
+        # update output layer
+        for n in range(self.num_outputs):
+            for w in range(len(self.layers[1].neurons[n].weights)):
+                self.layers[1].neurons[n].weights[w] -= self.learning_rate * output_deltas[n] * self.layers[0].neurons[w].output
+
+        # update hidden layer
+        for n in range(self.num_neurons_per_hidden_layer):
+            for w in range(len(self.layers[0].neurons[n].weights)):
+                self.layers[0].neurons[n].weights[w] -= self.learning_rate * hidden_deltas[n] * inputs[w]
 
         new_out = self.forward_pass(inputs)
 
