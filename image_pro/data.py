@@ -10,9 +10,8 @@
 from PIL import Image
 
 # Dimensions of our PNGs
-size = 40, 40
 
-def binary_image(file):
+def binary_image(file, size):
     # Loading file into memory
     im = Image.open(file)
 
@@ -48,7 +47,7 @@ def convert_to_1d(bin_data):
 
 
 def test():
-    result = binary_image("Images/colorfulsmiley.png")
+    result = binary_image("Images/colorfulsmiley.png", (40, 40))
 
     # This just pretty prints
     s = [[str(e) for e in row] for row in result]

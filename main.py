@@ -2,6 +2,7 @@ import image_pro.data as image
 import neural as nn
 import glob as glob
 import random
+import config as cfg
 
 # possible outputs
 emojis = ["hearts", "laugh", "sad", "smile"]
@@ -24,7 +25,7 @@ def backprop_train(test_len):
         # pick a specific test case
         test_cases = glob.glob('./test_data/' + emojis[emotion] + '/*.png')
         test_case = random.choice(test_cases)
-        inputs = image.convert_to_1d(image.binary_image(test_case))
+        inputs = image.convert_to_1d(image.binary_image(test_case, cfg.RES))
         net.train(inputs, outputs[emotion])
     return net
 
@@ -45,7 +46,7 @@ def training_results(train_len, type="BP"):
         for emotion in emojis:
             test_cases = glob.glob('./test_data/' + emotion + '/*.png')
             test_case = random.choice(test_cases)
-            inp = image.convert_to_1d(image.binary_image(test_case))
+            inp = image.convert_to_1d(image.binary_image(test_case, cfg.RES))
             result = net.forward_pass(inp)
             print(emotion + ":")
             print("     hearth eyes:" + str(result[0]*100) + "%")
@@ -56,4 +57,4 @@ def training_results(train_len, type="BP"):
         print("ERROR: Choose correct training type: BP - Backpropagation, GEN - genetic algorithm")
 
 
-training_results(1000, "BP")
+training_results(cfg.TRAIN_LEN, "BP")
