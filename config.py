@@ -1,5 +1,5 @@
 __author__ = 'timothy'
 
-RES = (20, 20)
-TRAIN_LEN = 1000
+RES = (30, 30)
+TRAIN_LEN = 5000
 NPL = 100

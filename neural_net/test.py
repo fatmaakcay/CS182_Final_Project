@@ -18,7 +18,7 @@ def example1():
     net = nn.NeuralNet(num_inputs, num_outputs, num_hidden_layers, num_npl, biases)
 
     training_data = [[0.05, 0.1], [0.01, 0.99]]
-    net.put_weights([[[.15, .20], [.25, .30]], [[.4, .45], [.5, .55]]])
+    net.put_weights2d([[[.15, .20], [.25, .30]], [[.4, .45], [.5, .55]]])
 
     print("first outs: " + str(net.forward_pass(training_data[0])))
     for _ in range(1):
