@@ -29,7 +29,9 @@ def backprop_train(test_len):
     net = nn.init_net()
     # train the net
     for i in range(test_len):
-        print("Training: " + str(i))
+        if i % 100 == 0:
+            per = float(i) / float(test_len) * 100
+            print("Training: " + str(format(per, '.2f')) + "%")
         # randomly pick an emotion to train
         emotion = random.choice(range(len(emojis)))
         # pick a specific test case
@@ -91,7 +93,8 @@ def load_net(path):
 
 
 net = backprop_train(cfg.TRAIN_LEN)
-save_net(net, "good.csv")
+save_net(net, "25k.csv")
+# net = load_net("./nets/good.csv")
 training_results(net)
 
 
