@@ -49,10 +49,10 @@ def training_results(train_len, type="BP"):
             inp = image.convert_to_1d(image.binary_image(test_case, cfg.RES))
             result = net.forward_pass(inp)
             print(emotion + ":")
-            print("     hearth eyes:" + str(result[0]*100) + "%")
-            print("     laugh:" + str(result[1]*100) + "%")
-            print("     sad:" + str(result[2]*100) + "%")
-            print("     smile:" + str(result[3]*100) + "%")
+            print("     hearth eyes:" + str(format((result[0]*100), '.2f')) + "%")
+            print("     laugh:" + str(format((result[1]*100), '.2f')) + "%")
+            print("     sad:" + str(format((result[2]*100), '.2f')) + "%")
+            print("     smile:" + str(format((result[3]*100), '.2f')) + "%")
     else:
         print("ERROR: Choose correct training type: BP - Backpropagation, GEN - genetic algorithm")
 
