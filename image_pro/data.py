@@ -43,7 +43,7 @@ def convert_to_1d(bin_data):
             output.append(el)
     return output
 
-result = binary_image("Images/colorfulsmiley.png")
+result = binary_image("Drawing.png")
 
 # This just pretty prints
 s = [[str(e) for e in row] for row in result]
