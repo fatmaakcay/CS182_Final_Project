@@ -39,9 +39,9 @@ def example2():
         ([0, 0], [0]),
         ([0, 1], [1]),
         ([1, 0], [1]),
-        ([1, 1], [0])
+        ([1, 1], [1])
     ]
-    for _ in range(100000):
+    for _ in range(10000):
         inp, out = random.choice(training_data)
         net.train(inp, out)
         #print(net.calculate_error(training_data))

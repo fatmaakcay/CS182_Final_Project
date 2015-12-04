@@ -40,16 +40,23 @@ def convert_to_1d(bin_data):
     output = []
     for row in bin_data:
         for el in row:
-            output.append(el)
+            if el == 1:
+                output.append(0)
+            else:
+                output.append(1)
     return output
 
-result = binary_image("Images/colorfulsmiley.png")
 
-# This just pretty prints
-s = [[str(e) for e in row] for row in result]
-lens = [max(map(len, col)) for col in zip(*s)]
-fmt = ' '.join('{{:{}}}'.format(x) for x in lens)
-table = [fmt.format(*row) for row in s]
-print '\n'.join(table)
+def test():
+    result = binary_image("Images/colorfulsmiley.png")
 
-print "Output finished"
+    # This just pretty prints
+    s = [[str(e) for e in row] for row in result]
+    lens = [max(map(len, col)) for col in zip(*s)]
+    fmt = ' '.join('{{:{}}}'.format(x) for x in lens)
+    table = [fmt.format(*row) for row in s]
+    print '\n'.join(table)
+
+    print "Output finished"
+
+
