@@ -45,11 +45,6 @@ def convert_to_1d(bin_data):
                 output.append(1)
     return output
 
-<<<<<<< HEAD
-result = binary_image("Drawing.png")
-=======
->>>>>>> e424df5f401fc51ae0581cfcbadb52a214b051fa
-
 def test():
     result = binary_image("Images/colorfulsmiley.png", (40, 40))
 
