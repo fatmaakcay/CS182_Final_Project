@@ -13,6 +13,20 @@ outputs = [
     [0, 0, 0, 1]
 ]
 
+# emojis = ["sad", "smile"]
+# outputs = [
+#     [1, 0],
+#     [0, 1]
+# ]
+
+def normalize(array):
+    sum = 0
+    for n in array:
+        sum += n
+    for i in range(len(array)):
+        array[i] = array[i]/sum
+    return array
+
 # function for training neural net with backpropagation
 def backprop_train(test_len):
 
@@ -48,6 +62,7 @@ def training_results(train_len, type="BP"):
             test_case = random.choice(test_cases)
             inp = image.convert_to_1d(image.binary_image(test_case, cfg.RES))
             result = net.forward_pass(inp)
+            normalize(result)
             print(emotion + ":")
             print("     hearth eyes:" + str(format((result[0]*100), '.2f')) + "%")
             print("     laugh:" + str(format((result[1]*100), '.2f')) + "%")
