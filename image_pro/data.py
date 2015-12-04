@@ -22,7 +22,6 @@ def binary_image(file, size):
     threshold = 250
     im = im.point(lambda p: p > threshold and 255)
     im = im.convert('1')
-    im.show()
 
     # Converting our image into a 2-dimensional array of binary values
     data = list(im.getdata())
@@ -45,6 +44,7 @@ def convert_to_1d(bin_data):
                 output.append(1)
     return output
 
+# For testing only
 def test():
     result = binary_image("../test_data/smile/010.png", (40, 40))
 
@@ -56,5 +56,3 @@ def test():
     print '\n'.join(table)
 
     print "Output finished"
-
-test()
