@@ -45,9 +45,8 @@ def convert_to_1d(bin_data):
                 output.append(1)
     return output
 
-
 def test():
-    result = binary_image("Images/colorfulsmiley.png", (40, 40))
+    result = binary_image("../test_data/smile/024.png", (40, 40))
 
     # This just pretty prints
     s = [[str(e) for e in row] for row in result]
@@ -57,5 +56,3 @@ def test():
     print '\n'.join(table)
 
     print "Output finished"
-
-
