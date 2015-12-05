@@ -16,7 +16,6 @@ def gen_err(pop, training_data):
         for row in training_data[0]:
             e = net.forward_pass(row)
             error_hearts += nn.error(cfg.outputs[0], e)
-            print(error_hearts)
         for row in training_data[1]:
             e = net.forward_pass(row)
             error_laugh += nn.error(cfg.outputs[1], e)
@@ -61,7 +60,6 @@ def genetic_train(pop_size, test_len):
     while errors[idx_err[0]] > 0.1 or counter > test_len:
 
         print("Generation: " + str(counter))
-        print errors
 
         # decides best 2 parents based on confidence matrix
         parent1 = pop[idx_err[0]]
