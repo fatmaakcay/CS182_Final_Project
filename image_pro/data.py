@@ -22,6 +22,7 @@ def binary_image(file, size):
     threshold = 250
     im = im.point(lambda p: p > threshold and 255)
     im = im.convert('1')
+    # im.show()
 
     # Converting our image into a 2-dimensional array of binary values
     data = list(im.getdata())

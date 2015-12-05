@@ -122,10 +122,18 @@ class NeuralNet(object):
 
     # Given a 2D array of weights, starting with the first neuron in the first layer and
     # ending with the last neuron in the last array, sets the weights of the all the neurons in the net.
-    def put_weights(self, weights):
+    def put_weights2d(self, weights):
         for i, layer in enumerate(self.layers):
             for n, neuron in enumerate(layer.neurons):
                 neuron.set_weights(weights[i][n])
+
+    def put_weights1d(self, weights):
+        i = 0
+        for l in self.layers:
+            for n in l.neurons:
+                for w in range(len(n.weights)):
+                    n.weights[w] = weights[i]
+                    i += 1
 
     # Given an input, calculates the output of the NN.
     def forward_pass(self, inputs):
