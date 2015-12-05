@@ -6,21 +6,19 @@ import config as cfg
 import glob
 import csv
 
-emojis = ["hearts", "laugh", "sad", "smile"]
-
 
 def convert_images():
 
     for i in range(4):
 
         # Open up the file to write in
-        path = "./test_data/" + emojis[i] + "/converted.csv"
+        path = "./test_data/" + cfg.emojis[i] + "/converted.csv"
         f = open(path, 'w+')
         w = csv.writer(f)
 
         # Get the test cases
-        test_cases = glob.glob('./test_data/' + emojis[i] + '/*.png')
-        print 'Converting ' + emojis[i]
+        test_cases = glob.glob('./test_data/' + cfg.emojis[i] + '/*.png')
+        print 'Converting ' + cfg.emojis[i]
 
         for test_case in test_cases:
             # convert image
