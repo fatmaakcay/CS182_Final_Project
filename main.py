@@ -1,5 +1,6 @@
 import image_pro.data as image
 import neural as nn
+import genetic as gen 
 import glob as glob
 import random
 import config as cfg
@@ -43,9 +44,61 @@ def backprop_train(test_len):
 
 
 # TODO: Function for training neural net with genetic algorithm
-def genetic_train():
-    net = nn.init_net()
-    return net
+def gen_err(pop):
+    err = []
+    for net in pop:
+        error_hearts = 0.0
+        error_laugh = 0.0
+        error_sad = 0.0
+        error_smile = 0.0
+
+        for row in training_hearts:
+            e = net.forward_pass(row)
+            error_hearts += 1 - e[0]
+        for row in training_laugh:
+            e = net.forward_pass(row)
+            error_hearts += 1 - e[1]
+        for row in training_sad:
+            e = net.forward_pass(row)
+            error_hearts += 1 - e[2]
+        for row in training_smile:
+            e = net.forward_pass(row)
+            error_hearts += 1 - e[3]
+
+        error_hearts = error_hearts/45.0
+        error_laugh = error_laugh/45.0
+        error_sad = error_sad/45.0
+        error_smile = error_smile/45.0
+
+        err.append(error_hearts+error_laugh+error_sad+error_smile)
+    return err
+
+def genetic_train(pop_size, test_len):
+    pop = []
+    best_net = None
+    best_p_1 = None
+    best_p_2 = None
+
+    training_hearts = csv.reader(open(training_hearts.csv))
+    training_laugh = csv.reader(open(training_laugh.csv))
+    training_sad = csv.reader(open(training_sad.csv))
+    training_smile = csv.reader(open(training_smile.csv))
+
+    for x in xrange(pop_size):
+        net = nn.init_net() 
+        pop.append(net)
+
+    errors = gen_err(pop)
+    # put_weights1d(self, weights)
+    # forward_pass(self, inputs):
+    # get_weights(self)
+    # emojis = ["hearts", "laugh", "sad", "smile"]
+
+    # decides best 2 parents based on confidence matrix 
+    
+    while 
+
+    return best_net
 
 
 def training_results(net):
@@ -93,8 +146,12 @@ def load_net(path):
 
 
 net = backprop_train(cfg.TRAIN_LEN)
+
 save_net(net, "25k.csv")
 # net = load_net("./nets/good.csv")
 training_results(net)
+
+#gen alg
+#net = genetic_train(cfg.POP_SIZE, cfg.TRAIN_LEN)
 
 

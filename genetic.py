@@ -1,3 +1,2 @@
-import genetic_alg as gen
+import genetic_alg.genetic as gen
 
-gen.fit.count()
