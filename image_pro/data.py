@@ -34,6 +34,7 @@ def binary_image(file, size):
 
     return binary_data
 
+
 # Convert 2d array to 1d array
 def convert_to_1d(bin_data):
     output = []
@@ -45,6 +46,7 @@ def convert_to_1d(bin_data):
                 output.append(1)
     return output
 
+
 # For testing only
 def test():
     result = binary_image("../test_data/smile/010.png", (40, 40))
@@ -54,6 +56,6 @@ def test():
     lens = [max(map(len, col)) for col in zip(*s)]
     fmt = ' '.join('{{:{}}}'.format(x) for x in lens)
     table = [fmt.format(*row) for row in s]
-    print '\n'.join(table)
+    print ('\n'.join(table))
 
-    print "Output finished"
+    print ("Output finished")

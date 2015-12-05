@@ -8,16 +8,28 @@ import csv
 
 emojis = ["hearts", "laugh", "sad", "smile"]
 
-# CSV Writer
-f = open('binarytext.csv', 'w')
-w = csv.writer(f)
 
-for i in range(4):
-    test_cases = glob.glob('./test_data/' + emojis[i] + '/*.png')
-    print 'Loop ' + str(i)
-    for test_case in test_cases:
-        data = image.binary_image(test_case, cfg.RES)
-        data = image.convert_to_1d(data)
-        w.writerow(data)
+def convert_images():
 
-f.close()
+    for i in range(4):
+
+        # Open up the file to write in
+        path = "./test_data/" + emojis[i] + "/converted.csv"
+        f = open(path, 'w+')
+        w = csv.writer(f)
+
+        # Get the test cases
+        test_cases = glob.glob('./test_data/' + emojis[i] + '/*.png')
+        print 'Converting ' + emojis[i]
+
+        for test_case in test_cases:
+            # convert image
+            data = image.binary_image(test_case, cfg.RES)
+            data = image.convert_to_1d(data)
+
+            # Write data into file
+            w.writerow(data)
+
+        # close the file
+        f.close()
+    print("files converted!")
