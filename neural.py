@@ -22,7 +22,7 @@ def backprop_train(test_len):
     training_inputs = helpers.load_training_data()
 
     # initalize a net
-    net = nn.init_net()
+    net = init_net()
 
     # train the net
     for i in range(test_len):

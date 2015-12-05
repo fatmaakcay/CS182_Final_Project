@@ -55,9 +55,11 @@ def genetic_train(pop_size, test_len):
     # sorts the errors array but only stores indices
     idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
 
+    print(" Smallest error: " + str(errors[idx_err[0]]))
+
     # go through the generations
     counter = 1
-    while errors[idx_err[0]] > 0.1 or counter > test_len:
+    while errors[idx_err[0]] > 0.1 and counter < test_len:
 
         print("Generation: " + str(counter))
 
@@ -66,7 +68,7 @@ def genetic_train(pop_size, test_len):
         parent2 = pop[idx_err[1]]
         w1 = parent1.get_weights()
         w2 = parent2.get_weights()
-        mut_cnt = int(cfg.MUT_RATE * len(w1))
+        mut_cnt = 0
         for x in idx_err[2:]:
             new_w = gen.recombine(w1, w2)
             new_w = gen.mutate(new_w, mut_cnt)
@@ -74,6 +76,7 @@ def genetic_train(pop_size, test_len):
 
         errors = gen_err(pop, training_data)
         idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
+        print(" Smallest error: " + str(errors[idx_err[0]]))
         counter += 1
 
     best_net = pop[idx_err[0]]

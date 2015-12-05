@@ -33,7 +33,10 @@ class Neuron(object):
         self.weights = []
         self.output = 0
         for _ in range(num_inputs):
-            self.weights.append(random.random() * 0.05)
+            if random.random() > 0.5:
+                self.weights.append(random.random() * 0.05)
+            else:
+                self.weights.append(random.random() * -0.05)
 
     # sums the inputs weighted with the weights.
     def sum(self, inputs):

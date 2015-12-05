@@ -24,7 +24,7 @@ def main(argv):
         elif opt == "-n":
             net_name = arg
         elif opt == "-l":
-            train_len = arg
+            train_len = int(arg)
         elif opt == "-c":
             converter.convert_images()
         elif opt == "-a":
