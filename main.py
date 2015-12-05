@@ -76,8 +76,6 @@ def gen_err(pop):
 def genetic_train(pop_size, test_len):
     pop = []
     best_net = None
-    best_p_1 = None
-    best_p_2 = None
 
     training_hearts = csv.reader(open(training_hearts.csv))
     training_laugh = csv.reader(open(training_laugh.csv))
@@ -89,15 +87,28 @@ def genetic_train(pop_size, test_len):
         pop.append(net)
 
     errors = gen_err(pop)
+    #sorts the errors array but only stores indices 
+    idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
     # put_weights1d(self, weights)
-    # forward_pass(self, inputs):
     # get_weights(self)
     # emojis = ["hearts", "laugh", "sad", "smile"]
 
     # decides best 2 parents based on confidence matrix 
     
-    while 
+    while errors[idx_err[0]] > 0.1:
+        parent1 = pop[idx_err[0]]
+        parent2 = pop[idx_err[1]]
+        w1 = parent1.get_weights()
+        w2 = parent2.get_weights()
+        for x in idx_err[2:]:
+            new_w = gen.recombine(w1, w2)
+            new_w = gen.mutate(new_w)
+            pop[x].put_weights1d(new_w)
 
+        errors = gen_err(pop)
+        idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
+
+    best_net = pop[idx_err[0]]
     return best_net
 
 
@@ -145,13 +156,13 @@ def load_net(path):
     return net
 
 
-net = backprop_train(cfg.TRAIN_LEN)
+# net = backprop_train(cfg.TRAIN_LEN)
 
-save_net(net, "25k.csv")
-# net = load_net("./nets/good.csv")
-training_results(net)
+# save_net(net, "25k.csv")
+# # net = load_net("./nets/good.csv")
+# training_results(net)
 
 #gen alg
-#net = genetic_train(cfg.POP_SIZE, cfg.TRAIN_LEN)
+net = genetic_train(cfg.POP_SIZE, cfg.TRAIN_LEN)
 
 

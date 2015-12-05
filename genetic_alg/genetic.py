@@ -2,15 +2,15 @@ import random
 
 
 def mutate(chromosome, n):
-	print chromosome
+	#print chromosome
 	for x in xrange(n):
 		p = random.randint(0, len(chromosome))
 		chromosome[p] = random.random() % 0.15 
-	print chromosome
+	#print chromosome
 	return chromosome
 
 def recombine(chr1, chr2):
-	print chr1, chr2
+	#print chr1, chr2
 	child = []
 
 	r = random.randint(0,1)
@@ -26,4 +26,6 @@ def recombine(chr1, chr2):
 		child.extend(chr1[:p])
 		child.extend(chr2[p:q])
 		child.extend(chr2[q:])
+
+	return child
 
