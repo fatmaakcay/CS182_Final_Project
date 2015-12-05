@@ -9,6 +9,7 @@ import csv
 
 def convert_images():
 
+    # convert the training data
     for i in range(4):
 
         # Open up the file to write in
@@ -30,4 +31,5 @@ def convert_images():
 
         # close the file
         f.close()
+
     print("files converted!")
