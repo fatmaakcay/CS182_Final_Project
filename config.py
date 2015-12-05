@@ -15,4 +15,4 @@ outputs = [
 RES = (25, 25)
 NPL = 120
 POP_SIZE = 10
-MUT_RATE = 0.2
+MUT_RATE = 0.05

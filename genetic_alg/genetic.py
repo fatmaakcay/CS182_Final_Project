@@ -4,7 +4,7 @@ import random
 def mutate(chromosome, n):
 	for x in xrange(n):
 		p = random.randint(0, len(chromosome)-1)
-		if random.random > 0.5:
+		if random.random() > 0.8:
 			chromosome[p] += random.random() * 0.01
 		else:
 			chromosome[p] -= random.random() * 0.01

@@ -12,21 +12,30 @@ def main(argv):
     net_name = ""
     train_len = 500
     alg = ""
+    autosave_name = ""
     try:
         opts, args = getopt.getopt(argv, "hn:l:c:a:")
     except getopt.GetoptError:
-        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)>")
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <autosave net(y/n)>")
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again (y, n)>, -a <algorithm to use (GEN, BP)>")
+            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again (y/n)>, -a <algorithm to use (GEN, BP)> -as <name for autosaving net>")
             sys.exit()
         elif opt == "-n":
             net_name = arg
         elif opt == "-l":
             train_len = int(arg)
         elif opt == "-c":
-            converter.convert_images()
+            if arg in ("y", "Y"):
+                converter.convert_images()
+            elif arg not in ("N", "n"):
+                print("Invalid input for -c")
+        elif opt == "-as":
+            if arg != "":
+                autosave_name = arg
+            else:
+                print("Invalid input for -as")
         elif opt == "-a":
             if arg == "GEN" or arg == "BP":
                 alg = arg
@@ -42,8 +51,12 @@ def main(argv):
         sys.exit()
     elif alg == "GEN":
         net = gen.genetic_train(cfg.POP_SIZE, train_len)
+        if autosave_name != "":
+            helpers.save_net(net, autosave_name)
     else:
         net = nn.backprop_train(train_len)
+        if autosave_name != "":
+            helpers.save_net(net, autosave_name)
 
     print("Net ready!")
 
