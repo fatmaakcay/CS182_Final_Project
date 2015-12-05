@@ -156,13 +156,13 @@ def load_net(path):
     return net
 
 
-# net = backprop_train(cfg.TRAIN_LEN)
+net = backprop_train(cfg.TRAIN_LEN)
 
-# save_net(net, "25k.csv")
-# # net = load_net("./nets/good.csv")
-# training_results(net)
+save_net(net, "25k.csv")
+# net = load_net("./nets/good.csv")
+training_results(net)
 
 #gen alg
-net = genetic_train(cfg.POP_SIZE, cfg.TRAIN_LEN)
+#net = genetic_train(cfg.POP_SIZE, cfg.TRAIN_LEN)
 
 
