@@ -1,7 +1,6 @@
 ###############################################################################
 # COMPSCI 182
 # November 2015
-# Khalid Tawil
 #
 # Takes in an image and reduces it to a 40x40 black and white image
 # To see an image use im.show()

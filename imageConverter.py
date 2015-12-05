@@ -1,5 +1,4 @@
 # Produces a CSV file of the test images in binary form
-# Khalid Tawil
 
 import image_pro.data as image
 import config as cfg
