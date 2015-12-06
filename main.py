@@ -18,6 +18,9 @@ def main(argv):
     except getopt.GetoptError:
         print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <autosave net(y/n)>")
         sys.exit(2)
+    if not argv:
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <autosave net(y/n)>")
+        sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
             print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again (y/n)>, -a <algorithm to use (GEN, BP)> -as <name for autosaving net>")
@@ -27,10 +30,7 @@ def main(argv):
         elif opt == "-l":
             train_len = int(arg)
         elif opt == "-c":
-            if arg in ("y", "Y"):
-                converter.convert_images()
-            elif arg not in ("N", "n"):
-                print("Invalid input for -c")
+            converter.convert_images()
         elif opt == "-as":
             if arg != "":
                 autosave_name = arg

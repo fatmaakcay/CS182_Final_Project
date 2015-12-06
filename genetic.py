@@ -59,7 +59,6 @@ def genetic_train(pop_size, test_len):
         errors = gen_err(pop, training_data)
         idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
         print(" Smallest error: " + str(errors[idx_err[0]]))
-        print(errors)
         counter += 1
 
     best_net = pop[idx_err[0]]
