@@ -100,12 +100,13 @@ def main(argv):
                 name = raw_input("filename: ")
             helpers.save_net(net, name)
         elif choice in ("C", "c"):
-            train_len = int(input("training length?"))
-            while len == 0:
-                train_len = int(input("try again"))
-            alg = input("Which algorithm to use? GEN/BP")
+            train_len = raw_input("training length? ")
+            while not train_len.isdigit():
+                train_len = raw_input("try again! ")
+            train_len = int(train_len)
+            alg = raw_input("Which algorithm to use? GEN/BP: ")
             while not (alg == "GEN" or alg == "BP"):
-                alg = input("Try again! GEN/BP")
+                alg = raw_input("Try again! GEN/BP: ")
             if alg == "GEN":
                 gen.continue_gen(net, train_len, cfg.POP_SIZE)
             else:

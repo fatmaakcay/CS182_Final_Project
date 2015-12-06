@@ -90,7 +90,7 @@ def continue_gen(net, train_len, pop_size):
 
     # Goes through the generations
     counter = 1
-    while errors[idx_err[0]] > 0.1 and counter < train_len:
+    while counter < train_len:
 
         print("Generation: " + str(counter))
 
