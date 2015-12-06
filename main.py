@@ -14,7 +14,7 @@ def main(argv):
     alg = ""
     autosave_name = ""
     try:
-        opts, args = getopt.getopt(argv, "hn:l:c:a:")
+        opts, args = getopt.getopt(argv, "hn:l:c:a:as:")
     except getopt.GetoptError:
         print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
         sys.exit(2)
@@ -35,7 +35,7 @@ def main(argv):
             if arg != "":
                 autosave_name = arg
             else:
-                print("Invalid input for -as")
+                print("Invalid input for -s")
         elif opt == "-a":
             print(arg)
             if arg == "GEN" or arg == "BP":
