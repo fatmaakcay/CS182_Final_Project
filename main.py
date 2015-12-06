@@ -16,14 +16,14 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hn:l:c:a:")
     except getopt.GetoptError:
-        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <name for autosaving net>")
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
         sys.exit(2)
     if not argv:
-        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <name for autosaving net>")
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -as <name for autosaving net>")
+            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
             sys.exit()
         elif opt == "-n":
             net_name = arg
@@ -31,12 +31,13 @@ def main(argv):
             train_len = int(arg)
         elif opt == "-c":
             converter.convert_images()
-        elif opt == "-as":
+        elif opt == "-s":
             if arg != "":
                 autosave_name = arg
             else:
                 print("Invalid input for -as")
         elif opt == "-a":
+            print(arg)
             if arg == "GEN" or arg == "BP":
                 alg = arg
             else:
