@@ -68,6 +68,7 @@ def main(argv):
         print("T - Run training data")
         print("F - Test a file")
         print("S - Save the net")
+        print("C - Continue training")
         choice = raw_input("")
 
         # Exit
@@ -98,6 +99,17 @@ def main(argv):
             while name == "":
                 name = raw_input("filename: ")
             helpers.save_net(net, name)
+        elif choice in ("C", "c"):
+            train_len = int(input("training length?"))
+            while len == 0:
+                train_len = int(input("try again"))
+            alg = input("Which algorithm to use? GEN/BP")
+            while not (alg == "GEN" or alg == "BP"):
+                alg = input("Try again! GEN/BP")
+            if alg == "GEN":
+                gen.continue_gen(net, train_len, cfg.POP_SIZE)
+            else:
+                nn.continue_bp(net, train_len)
 
 
 

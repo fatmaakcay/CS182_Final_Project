@@ -15,14 +15,24 @@ def init_net():
 
     return nn.NeuralNet(num_inputs, num_outputs, num_hidden_layers, num_npl)
 
+
 # function for training neural net with backpropagation
 def backprop_train(test_len):
 
-    # load training data
-    training_inputs = helpers.load_training_data()
-
     # initalize a net
     net = init_net()
+
+    return continue_bp(net, test_len)
+
+
+def error(ideal, actual):
+    return nn.total_error(ideal, actual)
+
+# function for continuing to train a net.
+def continue_bp(net, test_len):
+
+    # load training data
+    training_inputs = helpers.load_training_data()
 
     # train the net
     for i in range(test_len):
@@ -39,8 +49,5 @@ def backprop_train(test_len):
         test_case = random.choice(training_inputs[emotion])
 
         net.train(test_case, cfg.outputs[emotion])
+
     return net
-
-
-def error(ideal, actual):
-    return nn.total_error(ideal, actual)
