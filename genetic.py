@@ -3,19 +3,25 @@ import config as cfg
 import helpers as helpers
 import genetic_alg.genetic as gen
 
+
 # Error function for genetic alg
 def gen_err(pop, training_data):
     
     err = []
     for net in pop:
-        error = [0.0, 0.0, 0.0, 0.0]
-        for i in range(4):
-            for row in training_data[i]:
-                e = net.forward_pass(row)
-                error[i] += nn.error(cfg.outputs[i], e)
-            error[i] /= len(training_data[i])
-        err.append(sum(error))
+        net_error(net, training_data)
     return err
+
+
+# Error for one net
+def net_error(net, training_data):
+    error = [0.0, 0.0, 0.0, 0.0]
+    for i in range(4):
+        for row in training_data[i]:
+            e = net.forward_pass(row)
+            error[i] += nn.error(cfg.outputs[i], e)
+        error[i] /= len(training_data[i])
+    return sum(error)
 
 
 # Function for training neural net with genetic algorithm

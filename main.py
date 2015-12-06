@@ -63,12 +63,14 @@ def main(argv):
 
     # Ask the user for a command
     while True:
+        training_data = []
         print("Choose an action:")
         print("Q - Quit")
         print("T - Run training data")
         print("F - Test a file")
         print("S - Save the net")
         print("C - Continue training")
+        print("E - Calculate Error")
         choice = raw_input("")
 
         # Exit
@@ -111,6 +113,12 @@ def main(argv):
                 gen.continue_gen(net, train_len, cfg.POP_SIZE)
             else:
                 nn.continue_bp(net, train_len)
+        elif choice in ("E", "e"):
+            if not training_data:
+                training_data = helpers.load_training_data()
+            print("Calculating...")
+            print("Total error for net: " + str(gen.net_error(net, training_data)))
+
 
 
 
