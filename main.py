@@ -13,17 +13,18 @@ def main(argv):
     train_len = 500
     alg = ""
     autosave_name = ""
+    testing_name = ""
     try:
-        opts, args = getopt.getopt(argv, "hn:l:c:a:as:")
+        opts, args = getopt.getopt(argv, "hn:l:c:a:as:t:")
     except getopt.GetoptError:
-        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net> -t <name for auto testing file>")
         sys.exit(2)
     if not argv:
-        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
+        print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net> -t <name for auto testing file>")
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net>")
+            print ("Usage: main.py -n <net file to use> -l <training length>, -c <convert images again>, -a <algorithm to use (GEN, BP)> -s <name for autosaving net> -t <name for auto testing file>")
             sys.exit()
         elif opt == "-n":
             net_name = arg
@@ -43,6 +44,9 @@ def main(argv):
             else:
                 print ("Non-valid algorithm. Choose either GEN for genetic algorithm or BP for Backpropagation")
                 sys.exit()
+        elif opt == "-t":
+            testing_name = arg
+
 
     # initialize net
     if net_name != "":
@@ -51,11 +55,11 @@ def main(argv):
         print ("Neither a previous net or training algorithm was chosen. Try again!")
         sys.exit()
     elif alg == "GEN":
-        net = gen.genetic_train(cfg.POP_SIZE, train_len)
+        net = gen.genetic_train(cfg.POP_SIZE, train_len, testing_name)
         if autosave_name != "":
             helpers.save_net(net, autosave_name)
     else:
-        net = nn.backprop_train(train_len)
+        net = nn.backprop_train(train_len, testing_name)
         if autosave_name != "":
             helpers.save_net(net, autosave_name)
 

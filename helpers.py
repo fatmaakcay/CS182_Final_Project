@@ -59,10 +59,11 @@ def test_image(path, net):
 
     # print out result
     print(path + ":")
-    print("     hearth eyes:" + str(format((result[0]*100), '.2f')) + "%")
+    print("     heart eyes:" + str(format((result[0]*100), '.2f')) + "%")
     print("     laugh:" + str(format((result[1]*100), '.2f')) + "%")
     print("     sad:" + str(format((result[2]*100), '.2f')) + "%")
     print("     smile:" + str(format((result[3]*100), '.2f')) + "%")
+
 
 # test net with preset testing data
 def training_results(net):
@@ -70,11 +71,28 @@ def training_results(net):
     # choose an emotion:
     for emotion in cfg.emojis:
         # go through the test cases
-        test_cases = glob.glob('./test_data/non-training/' + emotion + '*.png')
+        print("_____________________________")
+        print(emotion + ": ")
+        test_cases = glob.glob('./test_data/non-training/' + emotion + '/*.png')
         for test_case in test_cases:
             # run the test case through the net
             test_image(test_case, net)
+        print("_____________________________")
 
+
+# get the average squared error from the testing data
+def get_testing_error(net):
+
+    # choose an emotion:
+    error = [0.0, 0.0, 0.0, 0.0]
+    for i, emotion in enumerate(cfg.emojis):
+        test_cases = glob.glob('./test_data/non-training/' + emotion + '/*.png')
+        for test_case in test_cases:
+            inp = image.convert_to_1d(image.binary_image(test_case, cfg.RES))
+            e = net.forward_pass(inp)
+            error[i] += nn.error(cfg.outputs[i], e)
+        error[i] /= len(test_cases)
+    return sum(error)
 
 def save_net(net, name):
 

@@ -1,19 +1,20 @@
 import neural as nn
 import config as cfg
+import csv
 import helpers as helpers
 import genetic_alg.genetic as gen
 
 
 # Error function for genetic alg
 def gen_err(pop, training_data):
-    
+
     err = []
     for net in pop:
-        net_error(net, training_data)
+        err.append(net_error(net, training_data))
     return err
 
 
-# Error for one net
+# Training data error for one net
 def net_error(net, training_data):
     error = [0.0, 0.0, 0.0, 0.0]
     for i in range(4):
@@ -25,7 +26,14 @@ def net_error(net, training_data):
 
 
 # Function for training neural net with genetic algorithm
-def genetic_train(pop_size, test_len):
+def genetic_train(pop_size, test_len, testing_name):
+
+    writer = None
+    csv_file = None
+    if testing_name != "":
+        path = "./results/" + testing_name
+        csv_file = open(path, 'wb+')
+        writer = csv.writer(csv_file, delimiter=',')
 
     print("Training the net!")
     # Initializes the first population
@@ -37,13 +45,17 @@ def genetic_train(pop_size, test_len):
 
     training_data = helpers.load_training_data()
 
-    # Calculate erros
+    # Calculate errors
     errors = gen_err(pop, training_data)
 
     # Sorts the errors array but only stores indices
     idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
 
     print(" Smallest error: " + str(errors[idx_err[0]]))
+
+    if writer is not None:
+        data = [0, helpers.get_testing_error(pop[idx_err[0]])]
+        writer.writerow(data)
 
     # Goes through the generations
     counter = 1
@@ -65,10 +77,25 @@ def genetic_train(pop_size, test_len):
         errors = gen_err(pop, training_data)
         idx_err = sorted(range(len(errors)), key=lambda k: errors[k])
         print(" Smallest error: " + str(errors[idx_err[0]]))
+
+        # write the current test_error
+        if writer is not None and counter % 5 == 0:
+            data = [counter, helpers.get_testing_error(pop[idx_err[0]])]
+            writer.writerow(data)
         counter += 1
+
+    # write the last test error:
+    if writer is not None:
+        data = [counter, helpers.get_testing_error(pop[idx_err[0]])]
+        writer.writerow(data)
+
+    # close the file
+    if csv_file is not None:
+        csv_file.close()
 
     best_net = pop[idx_err[0]]
     return best_net
+
 
 def continue_gen(net, train_len, pop_size):
 
@@ -86,7 +113,7 @@ def continue_gen(net, train_len, pop_size):
 
     training_data = helpers.load_training_data()
 
-    # Calculate erros
+    # Calculate errors
     errors = gen_err(pop, training_data)
 
     # Sorts the errors array but only stores indices
