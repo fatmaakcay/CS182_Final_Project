@@ -1,4 +1,4 @@
-<!-- # CS182_Final_Project
+# CS182_Final_Project
 
 Our system relies on the Python Imaging Library (PIL). In order to use our system you first need to download the library, which is available for free here: http://www.pythonware.com/products/pil/ \\
 
@@ -26,4 +26,3 @@ F will prompt the user for the path to a picture file, which it will then conver
 S will prompt the user for a filename and save the current net in /nets/.\\
 C will prompt the user for a training length and algorithm and then train the current net.\\
 E will calculate the average squared error of the current net using the training data and outputs the result.
- -->
